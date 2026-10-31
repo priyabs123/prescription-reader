@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ app_name }}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <h1>{{ app_name }}</h1>
+      <p class="tagline">Understand your prescription in English or ಕನ್ನಡ</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="status-line" class="status-line" aria-live="polite"></div>
+    <div id="error-box" class="banner banner-error" role="alert" hidden></div>
+
+    <!-- Upload + language: the only thing visible when the page opens -->
+    <section class="card" aria-labelledby="h-upload">
+      <h2 id="h-upload">Upload your prescription</h2>
+
+      <div class="row lang-row">
+        <label for="language" class="label inline">Language:</label>
+        <select id="language"></select>
+      </div>
+
+      <label class="dropzone" id="dropzone" for="file-input">
+        <input type="file" id="file-input" accept="image/jpeg,image/png,.jpg,.jpeg,.png">
+        <span class="dz-main">Tap to choose a photo, or drag and drop it here</span>
+        <span class="dz-sub" id="dz-sub">JPG, JPEG or PNG</span>
+      </label>
+
+      <div id="preview-area" hidden>
+        <div class="preview-frame"><img id="preview-img" alt="Preview of your uploaded prescription"></div>
+        <div class="row">
+          <button type="button" class="btn btn-light" id="rotate-left">&#8634; Rotate left</button>
+          <button type="button" class="btn btn-light" id="rotate-right">Rotate right &#8635;</button>
+          <button type="button" class="btn btn-primary" id="read-btn">Read prescription</button>
+        </div>
+      </div>
+      <ul id="quality-warnings" class="warn-list" hidden></ul>
+      <ul id="ocr-notes" class="note-list" hidden></ul>
+
+      <p class="hint center-text">No photo? <button type="button" class="link-btn" id="type-btn">Type the text instead</button></p>
+    </section>
+
+    <!-- Check the text: appears after reading an image (or choosing to type) -->
+    <section class="card" id="review-card" aria-labelledby="h-review" hidden>
+      <h2 id="h-review">Check the text</h2>
+      <p class="hint">Compare with your prescription and fix any mistakes. Words marked
+        <mark>[?like this?]</mark> were hard to read. Remove the marks only when you are sure;
+        a line that still has marks will <strong>not</strong> be explained.</p>
+      <div id="highlight" class="highlight" aria-live="polite" hidden></div>
+      <label class="label" for="transcript">One medicine per line:</label>
+      <textarea id="transcript" rows="8" spellcheck="false" maxlength="5000"
+        placeholder="Example:&#10;Tab Paracetamol 500mg 1-0-1 after food x 5 days"></textarea>
+      <button type="button" class="link-btn small" id="sample-btn">Fill with a sample</button>
+      <label class="check">
+        <input type="checkbox" id="confirm-check">
+        <span>I have compared this text with my prescription.</span>
+      </label>
+      <div class="row">
+        <button type="button" class="btn btn-primary" id="explain-btn" disabled>Explain</button>
+      </div>
+    </section>
+
+    <!-- Results: appear after pressing Explain -->
+    <section class="card" id="results" aria-labelledby="h-results" hidden>
+      <h2 id="h-results">Results</h2>
+      <div id="result-warnings" class="banner banner-warn" hidden>
+        <h3 id="lbl-warnings"></h3>
+        <ul id="warnings-list"></ul>
+      </div>
+
+      <h3 id="lbl-medicines"></h3>
+      <div id="res-items"></div>
+
+      <div id="other-wrap" hidden>
+        <h3 id="lbl-other"></h3>
+        <pre id="res-other" class="transcription"></pre>
+      </div>
+
+      <div id="general-wrap" class="ai-box" hidden>
+        <h3 id="lbl-general"></h3>
+        <p class="hint" id="general-caption"></p>
+        <ul id="general-list"></ul>
+      </div>
+
+      <h3 id="lbl-transcription"></h3>
+      <pre id="res-transcription" class="transcription"></pre>
+
+      <h3 id="lbl-notes"></h3>
+      <ul id="res-notes"></ul>
+      <p class="disclaimer" id="res-disclaimer"></p>
+
+      <div class="row">
+        <button type="button" class="btn btn-light" id="copy-btn">Copy results</button>
+        <button type="button" class="btn btn-light" id="download-btn">Download as text file</button>
+      </div>
+    </section>
+
+    <div class="row center">
+      <button type="button" class="btn btn-danger" id="clear-btn">Clear everything</button>
+    </div>
+    <p class="privacy">This tool only helps you read and understand a prescription. It does not replace your doctor or
+      pharmacist. Your image is not saved by this app. Press <em>Clear everything</em> when you finish.</p>
+  </main>
+
+  <div id="loading" class="loading" hidden role="status" aria-live="polite">
+    <div class="spinner"></div><div id="loading-text">Working...</div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
